@@ -5,26 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Response Example</title>
     <script src="https://cdn.tailwindcss.com"></script> <!-- Include Tailwind CSS -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Table header gradient */
+        thead {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        thead th {
+            color: white;
+        }
+        /* Row striping */
+        tbody tr:nth-child(odd) {
+            background-color: #f3f4f6; /* light gray */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff; /* white */
+        }
+        /* Hover effect for rows */
+        tbody tr:hover {
+            background-color: #e2e8f0; /* light blue on hover */
+        }
+        /* Card styling */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+        }
+        /* Order row styling */
+        .order-row {
+            background-color: #edf2f7; /* Slightly different background for orders */
+            border-left: 4px solid #667eea; /* Colored left border for orders */
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
 
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-4 text-center">JSON Response Example</h1>
+        <h1 class="text-4xl font-bold mb-6 text-center text-white">Customer Orders</h1>
 
-        <p class="text-center mb-6">This page demonstrates how to make a single-page web client request using vanilla JavaScript to retrieve and display JSON data.</p>
+        <p class="text-center text-white mb-6">This page demonstrates how to make a single-page web client request using vanilla JavaScript to retrieve and display JSON data.</p>
 
         <!-- Button to trigger the AJAX request -->
-        <div class="flex justify-center mb-4">
-            <button id="loadData" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <div class="flex justify-center mb-8">
+            <button id="loadData" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all">
                 Load Data
             </button>
         </div>
 
-        <!-- Table for displaying data -->
-        <div class="overflow-x-auto">
-            <table id="data" class="min-w-full table-auto bg-white shadow-md rounded-lg">
+        <!-- Card-like Table for displaying data -->
+        <div class="card">
+            <table id="data" class="min-w-full table-auto bg-white rounded-lg">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <tr class="uppercase text-sm leading-normal">
                         <th class="py-3 px-6 text-left">First Name</th>
                         <th class="py-3 px-6 text-left">Last Name</th>
                         <th class="py-3 px-6 text-left">City</th>
@@ -56,9 +91,9 @@
                 data.forEach(customer => {
                     // Append customer row
                     const customerRow = document.createElement('tr');
-                    customerRow.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-100');
+                    customerRow.classList.add('border-b', 'border-gray-200');
                     customerRow.innerHTML = `
-                        <td class="py-3 px-6 text-left whitespace-nowrap">${customer.first_name}</td>
+                        <td class="py-3 px-6 text-left whitespace-nowrap font-semibold">${customer.first_name}</td>
                         <td class="py-3 px-6 text-left">${customer.last_name}</td>
                         <td class="py-3 px-6 text-left">${customer.city}</td>
                         <td class="py-3 px-6 text-left">${customer.state}</td>
@@ -73,20 +108,21 @@
                         customer.orders.forEach(order => {
                             // Determine status (you can adjust based on your needs)
                             const orderStatus = order.status === 1 ? 'Pending' : 'Shipped';
+                            const statusColor = order.status === 1 ? 'text-yellow-600' : 'text-green-600';
 
                             const orderRow = document.createElement('tr');
-                            orderRow.classList.add('bg-gray-50');
+                            orderRow.classList.add('border-b', 'border-gray-200', 'order-row');
                             orderRow.innerHTML = `
-                                <td class="py-2 px-6 text-left whitespace-nowrap" colspan="2" style="padding-left: 2rem;">Order ID: ${order.order_id}</td>
+                                <td class="py-2 px-6 text-left whitespace-nowrap" colspan="3" style="padding-left: 2rem;">Order ID: ${order.order_id}</td>
                                 <td class="py-2 px-6 text-left" colspan="2">Order Date: ${order.order_date}</td>
-                                <td class="py-2 px-6 text-left" colspan="2">Status: ${orderStatus}</td>
+                                <td class="py-2 px-6 text-left ${statusColor}" colspan="2">Status: ${orderStatus}</td>
                             `;
                             tbody.appendChild(orderRow);
                         });
                     } else {
                         // If no orders, append a row indicating no orders
                         const noOrderRow = document.createElement('tr');
-                        noOrderRow.classList.add('bg-gray-50');
+                        noOrderRow.classList.add('border-b', 'border-gray-200', 'order-row');
                         noOrderRow.innerHTML = `
                             <td class="py-2 px-6 text-left" colspan="7" style="padding-left: 2rem;">No orders for this customer</td>
                         `;
@@ -98,7 +134,7 @@
                 console.error('Error occurred:', error);
             });
     });
-</script>
+    </script>
 
 </body>
 </html>
